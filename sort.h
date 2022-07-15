@@ -29,4 +29,5 @@ void counting_sort(int *array, size_t size);
 /*Selection sort*/
 void selection_sort(int *array, size_t size);
 void quick_sort(int *array, size_t size);
+void quick_sort_hoare(int *array, size_t size);
 #endif
