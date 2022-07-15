@@ -1,51 +1,43 @@
 #include "sort.h"
 /**
- *counting_sort- Sort an array of integers using counting sort.
- *@array: Pointer to an array of integers.
- *@size: size of the array.
- *Return: NULL
- */
+ * counting_sort - sorts an array of integers in ascending
+ * order using the Counting sort algorithm
+ * @array: pointer to array
+ * @size: size of the array
+ **/
 void counting_sort(int *array, size_t size)
 {
+	int n, j, *count_array, *aux;
 	size_t i;
-	int j;
-	int max = array[0];
-	int *output = malloc(sizeof(int) * size);
-	int *count = malloc(sizeof(int) * size + 400);
 
-	if (output == NULL || count == NULL)
+	if (!array || size < 2)
 		return;
-
-
-/*Store the count of each character*/
-	for (i = 0; array[i]; ++i)
-		++count[array[i]];
-/*Find the largest element in the array*/
-	for (i = 1; i < size; i++)
+	n = array[0];
+	for (i = 0; i < size; i++)
 	{
-		if (max < array[i])
-		{
-			max = array[i];
-		}
+		if (array[i] > n)
+			n = array[i];
 	}
-/*Change count[i] so that  count[i] now contains actual position*/
-	for (j = 1; j <= (max + 1); ++j)
+	count_array = calloc((n + 1), sizeof(int));
+	for (i = 0; i < size; i++)
 	{
-		count[j] += count[j - 1];
+		count_array[array[i]]++;
 	}
-	print_array(count, (max + 1));
-
-/*Build the output array.*/
-	for (i = 0; array[i]; ++i)
+	for (j = 1; j < n; j++)
 	{
-		output[count[array[i]] - 1] = array[i];
-		--count[array[i]];
+		count_array[j + 1] += count_array[j];
 	}
-/*copy output array to array*/
-	for (i = 0; array[i]; ++i)
+	print_array(count_array, n + 1);
+	aux = malloc(sizeof(int) * size);
+	for (i = 0; i < size; i++)
 	{
-		array[i] = output[i];
+		count_array[array[i]]--;
+		aux[count_array[array[i]]] = array[i];
 	}
-	free(count);
-	free(output);
+	for (i = 0; i < size; i++)
+	{
+		array[i] = aux[i];
+	}
+	free(aux);
+	free(count_array);
 }
